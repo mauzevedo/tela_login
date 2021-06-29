@@ -90,7 +90,7 @@ input.pessoa {
 input[type=submit] {
     width: 100%;
     background-color: #ffffff;
-    color: #000000;
+    color: #6d6c6c;
 }
 
 input[type=submit]:hover {

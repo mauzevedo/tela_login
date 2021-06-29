@@ -8,6 +8,7 @@ class Usuario {
     public function conectar($nome, $host, $usuario, $senha){
 
         global $pdo;
+        global $msgErro;
         try{
         $pdo = new PDO("mysql:dbname=".$nome.";host=".$host,$usuario,$senha);
     } catch (PDOException $e){
@@ -25,21 +26,36 @@ class Usuario {
             return false; //ja cadastrado
         } else {
             //caso nao, Cadastrar
-            $sql = $pdo->prepare("INSERT INTO usuarios (nome, telefone, email, senha) VALUES (:n, :t, :e, :s");
+            $sql = $pdo->prepare("INSERT INTO id_usuario (nome, telefone, email, senha) VALUES (:n, :t, :e, :s");
             $sql->bindValue(":n",$nome);
             $sql->bindValue(":t",$telefone);
             $sql->bindValue(":e",$email);
-            $sql->bindValue(":s",$senha);
+            $sql->bindValue(":s",md5($senha));
             $sql->execute();
-            return true;
+            return true;//tudo ok
         }
         
 
     }
-    public function logar(){
+    public function logar($email, $senha){
 
         global $pdo;
+        //Verificar se o email e senha estao cadastrados, se sim
+        $sql = $pdo->prepare("SELECT id_usuario FROM usuarios WHERE email = :e AND senha = :s");
+        $sql->bindValue(":e",$email);
+        $sql->bindValue(":s",md5($senha));
+        $sql->execute();
+        if($sql->rowCount() > 0) {
+            //entrar no sistema (sessao)
+            $dado = $sql->fetch();
+            session_start();
+            $_SESSION['id_usuario'] = $dado['id_usuario'];
+            return true; //logado com sucesso
+        } else {
 
+            return false; //nao foi possivel logar
+
+        }
     }
 
 }

@@ -10,8 +10,8 @@
 <body>
     <div class="backgorund">
         <div class="container">
+            <h1>Entrar</h1>
             <form method="POST">
-                <h1>Entrar</h1>
                 <input class="email" type="email" name="email" placeholder="Usuário">
                 <input class="password" type="password" name="senha" placeholder="Senha">
                 <input type="submit" value="ACESSAR">
